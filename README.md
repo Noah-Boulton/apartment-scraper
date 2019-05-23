@@ -1,2 +1,2 @@
 # apartment-scraper
-Apartment scraper to help me find an apartment in Montreal
+Apartment scraper to help me find a place in Montreal
