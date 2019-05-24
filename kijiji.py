@@ -2,7 +2,7 @@ import requests
 import re
 from bs4 import BeautifulSoup
 
-def kijiji():
+def kijiji(num):
         result = requests.get('https://www.kijiji.ca/b-appartement-condo/grand-montreal/c37l80002?price=0__1100&ad=offering')
         html_doc = result.content
         soup = BeautifulSoup(html_doc, 'html.parser')
@@ -17,7 +17,7 @@ def kijiji():
         LINKS = list(dict.fromkeys(LINKS))
 
         APTS = []
-        for i in range(0, 10):
+        for i in range(0, num):
                 apt = requests.get(LINKS[i])
                 apt_doc = apt.content
 
@@ -29,7 +29,9 @@ def kijiji():
                         "name"  : apt_soup.title.text,
                         "price" : int(price.group(1)) if price else 0,
                         "url"   : LINKS[i],
-                        "coords" : [float(latitude['content']), float(longitude['content'])]
+                        "coords" : [float(latitude['content']), float(longitude['content'])],
+                        "metro" : None,
+                        "distance" : None
                         }
                 APTS.append(apartment)
         return APTS
