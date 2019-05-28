@@ -1,0 +1,6 @@
+slackclient
+certifi
+sqlalchemy
+requests
+bs4
+websocket-client

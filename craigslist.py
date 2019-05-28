@@ -1,11 +1,13 @@
 import requests 
-from bs4 import BeautifulSoup
 import re 
+from bs4 import BeautifulSoup
+from distance import closest_metro
 
-def craigslist(num):
+def get_craigslist_links():
         result = requests.get("https://montreal.craigslist.org/search/apa?max_price=1100&availabilityMode=0&sale_date=all+dates&lang=en&cc=us")
         html_doc = result.content
         soup = BeautifulSoup(html_doc, 'html.parser')
+
         LINKS = []
         for link in soup.find_all('a'):
                 l = link.get('href')
@@ -14,21 +16,22 @@ def craigslist(num):
                         LINKS.append(l)
 
         LINKS = list(dict.fromkeys(LINKS))
+        return LINKS
 
-        APTS = []
-        for i in range(0, num):
-                apt = requests.get(LINKS[i])
-                apt_doc = apt.content
-                apt_soup = BeautifulSoup(apt_doc, 'html.parser')
-                price = apt_soup.find(class_="price")
-                geo = apt_soup.find(class_="viewposting")
-                apartment = {
-                        "name"  : apt_soup.title.text,
-                        "price" : int(price.text[1:]),
-                        "url"   : LINKS[i],
-                        "coords" : [float(geo['data-latitude']), float(geo['data-longitude'])],
-                        "metro" : None,
-                        "distance" : None
-                        }
-                APTS.append(apartment)
-        return APTS
+def get_craigslist_listings(link):
+        apt = requests.get(link)
+        apt_doc = apt.content
+        apt_soup = BeautifulSoup(apt_doc, 'html.parser')
+        price = apt_soup.find(class_="price")
+        geo = apt_soup.find(class_="viewposting")
+        coords = [float(geo['data-latitude']), float(geo['data-longitude'])]
+        metro = closest_metro(coords)
+        apartment = {
+                "name"  : apt_soup.title.text,
+                "price" : int(price.text[1:]),
+                "url"   : link,
+                "coords" : coords,
+                "metro" : metro[0],
+                "distance" : metro[1]
+                }
+        return apartment
