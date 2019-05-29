@@ -3,6 +3,7 @@ from kijiji import get_kijiji_links, get_kijiji_listings
 from slackclient import SlackClient
 import os
 
+from settings import getAPIToken
 from slack_bot import post_listing_to_slack
 
 from sqlalchemy import create_engine
@@ -35,7 +36,7 @@ if __name__ == "__main__":
     # rows = session.query(Listing).count()
     # print(rows)
     print("Getting Craigslist apartments.")
-    sc = SlackClient(os.environ["SLACK_API_TOKEN"])
+    sc = SlackClient(getAPIToken())
 
     craigslist_links = get_craigslist_links()
     craigslist_listings = []

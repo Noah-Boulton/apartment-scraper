@@ -9,3 +9,4 @@ __pycache__/
 apts.txt
 database_setup.py
 listings.db
+settings.py
