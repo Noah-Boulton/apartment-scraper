@@ -80,5 +80,12 @@ if __name__ == "__main__":
             kijiji_listings.append(apartment)
     
     for apt in craigslist_listings + kijiji_listings:
-        if(apt['distance'] < 1.2):
+        studio = False
+        if 'studio' in apt['name'].lower():
+            studio = True
+        if '1 1/2' in apt['name'].lower():
+            studio = True
+        if '1.5' in apt['name'].lower():
+            studio = True
+        if(apt['distance'] < 1.2 and not studio):
             post_listing_to_slack(sc, apt)

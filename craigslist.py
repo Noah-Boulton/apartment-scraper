@@ -23,12 +23,14 @@ def get_craigslist_listings(link):
         apt_doc = apt.content
         apt_soup = BeautifulSoup(apt_doc, 'html.parser')
         price = apt_soup.find(class_="price")
+        if(price):
+                price = int(price.text[1:])
         geo = apt_soup.find(class_="viewposting")
         coords = [float(geo['data-latitude']), float(geo['data-longitude'])]
         metro = closest_metro(coords)
         apartment = {
                 "name"  : apt_soup.title.text,
-                "price" : int(price.text[1:]),
+                "price" : price,
                 "url"   : link,
                 "coords" : coords,
                 "metro" : metro[0],
