@@ -33,8 +33,6 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 if __name__ == "__main__":    
-    # rows = session.query(Listing).count()
-    # print(rows)
     print("Getting Craigslist apartments.")
     sc = SlackClient(getAPIToken())
 
@@ -45,6 +43,8 @@ if __name__ == "__main__":
 
         if listing is None:
             apartment = get_craigslist_listings(link)
+            if(apartment is None):
+                continue
             new_listing = Listing(
                 link = link,
                 lat = apartment['coords'][0],
@@ -80,12 +80,5 @@ if __name__ == "__main__":
             kijiji_listings.append(apartment)
     
     for apt in craigslist_listings + kijiji_listings:
-        studio = False
-        if 'studio' in apt['name'].lower():
-            studio = True
-        if '1 1/2' in apt['name'].lower():
-            studio = True
-        if '1.5' in apt['name'].lower():
-            studio = True
-        if(apt['distance'] < 1.2 and not studio):
+        if(apt['distance'] < 1.2):
             post_listing_to_slack(sc, apt)

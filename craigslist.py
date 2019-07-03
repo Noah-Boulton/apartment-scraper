@@ -4,14 +4,14 @@ from bs4 import BeautifulSoup
 from distance import closest_metro
 
 def get_craigslist_links():
-        result = requests.get("https://montreal.craigslist.org/search/apa?max_price=1100&availabilityMode=0&sale_date=all+dates&lang=en&cc=us")
+        result = requests.get("https://toronto.craigslist.org/search/apa?max_price=1100&availabilityMode=0&sale_date=all+dates")
         html_doc = result.content
         soup = BeautifulSoup(html_doc, 'html.parser')
 
         LINKS = []
         for link in soup.find_all('a'):
                 l = link.get('href')
-                match = re.search("^https://montreal.craigslist.org/apa/d/",l)
+                match = re.search("^https://toronto.craigslist.org/tor/apa/d/",l)
                 if(match):
                         LINKS.append(l)
 
@@ -26,6 +26,8 @@ def get_craigslist_listings(link):
         if(price):
                 price = int(price.text[1:])
         geo = apt_soup.find(class_="viewposting")
+        if(geo is None):
+                return None
         coords = [float(geo['data-latitude']), float(geo['data-longitude'])]
         metro = closest_metro(coords)
         apartment = {

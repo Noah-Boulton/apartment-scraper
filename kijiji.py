@@ -4,14 +4,14 @@ from bs4 import BeautifulSoup
 from distance import closest_metro
 
 def get_kijiji_links():
-        result = requests.get('https://www.kijiji.ca/b-appartement-condo/grand-montreal/c37l80002?price=0__1100&ad=offering')
+        result = requests.get('https://www.kijiji.ca/b-for-rent/city-of-toronto/c30349001l1700273?price=__1100&ad=offering')
         html_doc = result.content
         soup = BeautifulSoup(html_doc, 'html.parser')
 
         LINKS = []
         for link in soup.find_all('a'):
                 l = link.get('href')
-                match = re.search("\/v-appartement-condo\/ville-de-montreal\/.*\/\d+$", str(l))
+                match = re.search("\/v-.+\/city-of-toronto/.+/\d+$", str(l))
                 if(match):
                         LINKS.append("https://www.kijiji.ca" + l)
 
