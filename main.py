@@ -24,8 +24,7 @@ class Listing(Base):
     lon = Column(Float)
     name = Column(String)
     price = Column(Float)
-    metro_station = Column(String)
-    distance = Column(Float)
+    area = Column(String)
 
 Base.metadata.create_all(engine)
 
@@ -33,8 +32,6 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 if __name__ == "__main__":    
-    # rows = session.query(Listing).count()
-    # print(rows)
     print("Getting Craigslist apartments.")
     sc = SlackClient(getAPIToken())
 
@@ -45,14 +42,15 @@ if __name__ == "__main__":
 
         if listing is None:
             apartment = get_craigslist_listings(link)
+            if(apartment is None):
+                continue
             new_listing = Listing(
                 link = link,
                 lat = apartment['coords'][0],
                 lon = apartment['coords'][1],
                 name = apartment['name'],
                 price = apartment['price'],
-                metro_station = apartment['metro'],
-                distance = apartment['distance']
+                area = apartment['area']
             )
             session.add(new_listing)
             session.commit()
@@ -72,20 +70,29 @@ if __name__ == "__main__":
                 lon = apartment['coords'][1],
                 name = apartment['name'],
                 price = apartment['price'],
-                metro_station = apartment['metro'],
-                distance = apartment['distance']
+                area = apartment['area']
             )
             session.add(new_listing)
             session.commit()
             kijiji_listings.append(apartment)
     
     for apt in craigslist_listings + kijiji_listings:
-        studio = False
-        if 'studio' in apt['name'].lower():
-            studio = True
-        if '1 1/2' in apt['name'].lower():
-            studio = True
-        if '1.5' in apt['name'].lower():
-            studio = True
-        if(apt['distance'] < 1.2 and not studio):
+        # if(apt['distance'] < 1.2):
+        #     post_listing_to_slack(sc, apt)
+        one_bed = False
+        if '1br' in apt['name'].lower():
+            one_bed = True
+        if '1 bedroom' in apt['name'].lower():
+            one_bed = True
+        if '1 bed' in apt['name'].lower():
+            one_bed = True
+        if '1 br' in apt['name'].lower():
+            one_bed = True
+        if 'one bed' in apt['name'].lower():
+            one_bed = True
+        if 'one bedroom' in apt['name'].lower():
+            one_bed = True
+        if 'bachelor' in apt['name'].lower():
+            one_bed = True
+        if(apt['area'] != "Vancouver" and not one_bed):
             post_listing_to_slack(sc, apt)
