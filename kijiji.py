@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from distance import closest_metro
 
 def get_kijiji_links():
-        result = requests.get('https://www.kijiji.ca/b-appartement-condo/grand-montreal/c37l80002?price=0__1100&ad=offering')
+        result = requests.get('https://www.kijiji.ca/b-appartement-condo/grand-montreal/c37l80002?price=0__2400&ad=offering')
         html_doc = result.content
         soup = BeautifulSoup(html_doc, 'html.parser')
 

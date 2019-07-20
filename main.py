@@ -85,7 +85,35 @@ if __name__ == "__main__":
             studio = True
         if '1 1/2' in apt['name'].lower():
             studio = True
+        if '1 ½' in apt['name'].lower():
+            studio = True
         if '1.5' in apt['name'].lower():
+            studio = True
+        if '1 bd' in apt['name'].lower():
+            studio = True
+        if '1 bed' in apt['name'].lower():
+            studio = True
+        if '2.5' in apt['name'].lower():
+            studio = True
+        if '2 bd' in apt['name'].lower():
+            studio = True
+        if '2 bed' in apt['name'].lower():
+            studio = True
+        if '2 1/2' in apt['name'].lower():
+            studio = True
+        if '2 ½' in apt['name'].lower():
+            studio = True
+        if '3.5' in apt['name'].lower():
+            studio = True
+        if '3 1/2' in apt['name'].lower():
+            studio = True
+        if '3 ½' in apt['name'].lower():
+            studio = True
+        if '4.5' in apt['name'].lower():
+            studio = True
+        if '4 1/2' in apt['name'].lower():
+            studio = True
+        if '4 ½' in apt['name'].lower():
             studio = True
         if(apt['distance'] < 1.2 and not studio):
             post_listing_to_slack(sc, apt)

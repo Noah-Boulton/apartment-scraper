@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from distance import closest_metro
 
 def get_craigslist_links():
-        result = requests.get("https://montreal.craigslist.org/search/apa?max_price=1100&availabilityMode=0&sale_date=all+dates&lang=en&cc=us")
+        result = requests.get("https://montreal.craigslist.org/search/apa?max_price=2400&min_bedrooms=3&availabilityMode=0&sale_date=all+dates&lang=en&cc=us")
         html_doc = result.content
         soup = BeautifulSoup(html_doc, 'html.parser')
 
