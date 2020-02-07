@@ -45,18 +45,19 @@ if __name__ == "__main__":
 
         if listing is None:
             apartment = get_craigslist_listings(link)
-            new_listing = Listing(
-                link = link,
-                lat = apartment['coords'][0],
-                lon = apartment['coords'][1],
-                name = apartment['name'],
-                price = apartment['price'],
-                metro_station = apartment['metro'],
-                distance = apartment['distance']
-            )
-            session.add(new_listing)
-            session.commit()
-            craigslist_listings.append(apartment)
+            if(apartment is not None):
+                new_listing = Listing(
+                    link = link,
+                    lat = apartment['coords'][0],
+                    lon = apartment['coords'][1],
+                    name = apartment['name'],
+                    price = apartment['price'],
+                    metro_station = apartment['metro'],
+                    distance = apartment['distance']
+                )
+                session.add(new_listing)
+                session.commit()
+                craigslist_listings.append(apartment)
 
     print("Getting Kijiji apartments.")
     kijiji_links = get_kijiji_links()

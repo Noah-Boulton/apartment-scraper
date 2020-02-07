@@ -26,6 +26,8 @@ def get_craigslist_listings(link):
         if(price):
                 price = int(price.text[1:])
         geo = apt_soup.find(class_="viewposting")
+        if(geo is None):
+                return None
         coords = [float(geo['data-latitude']), float(geo['data-longitude'])]
         metro = closest_metro(coords)
         apartment = {
